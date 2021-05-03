@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-ecr-token-manager
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "ecr-renew-token.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - delete
+  - create

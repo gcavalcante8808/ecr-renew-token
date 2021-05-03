@@ -1,0 +1,52 @@
+replicaCount: 1
+
+image:
+  repository: python
+  pullPolicy: IfNotPresent
+  tag: "3-alpine"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext:
+   capabilities:
+     drop:
+     - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+labelVersion: fake
+
+aws:
+  access_key_id: ""
+  secret_access_key: ""
+  aws_region: "us-east-1"
+
+secret_name: "ecr-token"
+cronjob_schedule: "0 */4 * * *"

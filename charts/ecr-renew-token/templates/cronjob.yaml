@@ -1,0 +1,43 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "ecr-renew-token.labels" . | nindent 4 }}
+spec:
+  jobTemplate:
+    metadata:
+      name: {{ .Release.Name }}
+      labels:
+        {{- include "ecr-renew-token.labels" . | nindent 10 }}
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          restartPolicy: Never
+          serviceAccountName: {{ .Release.Name }}
+          containers:
+          - image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            envFrom:
+              - secretRef:
+                  name: {{ .Release.Name }}
+              - configMapRef:
+                  name: {{ .Release.Name }}
+            command:
+              - sh
+              - -c
+              - |
+                pip install kubernetes==11.0.0 boto3==1.9.134
+                cat <<EOT > /tmp/app.py
+                {{ range .Files.Lines "app.py" }}
+                {{ . }}
+                {{ end }}
+                EOT
+                python /tmp/app.py
+            name: {{ .Chart.Name }}
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+
+  schedule: {{ .Values.cronjob_schedule }}
+status: {}

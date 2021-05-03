@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "ecr-renew-token.labels" . | nindent 4 }}
+data:
+  ECR_SECRET_NAMESPACE: {{ .Release.Namespace }}
+  ECR_SECRET_NAME: {{ .Values.secret_name }}
+  {{- range $key, $value := .Values.environment }}
+    {{ $key }}: {{ $value }}
+  {{ end }}
+
