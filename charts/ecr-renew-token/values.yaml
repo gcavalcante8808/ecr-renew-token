@@ -9,10 +9,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-serviceAccount:
-  create: false
-
-
 podAnnotations: {}
 
 podSecurityContext: {}
@@ -21,10 +17,6 @@ securityContext:
    capabilities:
      drop:
      - ALL
-
-service:
-  type: ClusterIP
-  port: 8080
 
 resources: {}
 
@@ -40,8 +32,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-labelVersion: fake
 
 aws:
   access_key_id: ""
