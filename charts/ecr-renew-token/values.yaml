@@ -40,3 +40,5 @@ aws:
 
 secret_name: "ecr-token"
 cronjob_schedule: "0 */4 * * *"
+serviceAccount:
+  annotations: {}
